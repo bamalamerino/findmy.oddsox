@@ -6,25 +6,99 @@
   <title>OddSox Link Tree</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 1;
+    }
+    
+    .search-bar p {
+      position: relative;
+      display: inline-block;
+      opacity: 0.85;
+    }
+    
+    .search-bar p::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+      0% {
+        opacity: 0.2;
+        width: 0;
+        left: 0;
+      }
+      50% {
+        opacity: 0.5;
+        width: 100%;
+      }
+      100% {
+        opacity: 0.2;
+        width: 0;
+        left: 100%;
+      }
+    }
+    
+    /* SVG logo styling */
+    .profile-image .cls-1 {
+      fill: white;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+    }
+    
+    .profile-image {
+      filter: drop-shadow(0 0 15px rgba(74, 144, 226, 0.3));
+      transform: translateZ(0); /* Helps with rendering on some browsers */
+      max-width: 90%;
+      transition: all 0.3s ease;
+    }
+    
+    .profile-image:hover {
+      filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.5));
+      transform: scale(1.02) translateZ(0);
+    }
+    
+    /* Additional styling for more transparency */
+    .social-link {
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+    
+    .social-link:hover {
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
-  <div class="background-image"></div>
+  <img src="Asset34.png" alt="Background" class="background-image">
   
   <div class="container">
     <div class="profile">
-      <img src="logo.png" alt="OddSox Logo" class="profile-image">
-      <h1>OddSox</h1>
+      <img src="ODDSOX-Logo.svg" alt="OddSox Logo" class="profile-image">
       <p>Design / Marketing / Advertising</p>
     </div>
     
+    <div class="search-bar">
+      <p>Connecting the dots</p>
+    </div>
+    
     <div class="chat-container">
-      <div class="search-bar">
-        <p>What do you need?</p>
-        <div class="chat-input-container">
-          <div class="chat-input">
-            <span>Prompts, Newsletter, ...?</span>
-            <i class="fas fa-search"></i>
-          </div>
+      <div class="chat-input-container" id="input-box">
+        <div class="chat-input">
+          <span>Prompts, Website, ...?</span>
+          <i class="fas fa-search"></i>
         </div>
       </div>
       
@@ -86,13 +160,9 @@
               <i class="fab fa-facebook-square"></i>
               <span>Facebook</span>
             </a>
-            <a href="https://www.instagram.com" class="social-link">
+            <a href="https://www.instagram.com/oddsox.agency/" class="social-link">
               <i class="fab fa-instagram"></i>
               <span>Instagram</span>
-            </a>
-            <a href="https://www.tiktok.com" class="social-link">
-              <i class="fab fa-tiktok"></i>
-              <span>TikTok</span>
             </a>
             <a href="mailto:hello@oddsox.xyz" class="social-link">
               <i class="fas fa-envelope"></i>
@@ -113,6 +183,42 @@
     </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Inline script to make sure the toggle works
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputBox = document.getElementById('input-box');
+      const linksContainer = document.querySelector('.links-container');
+      
+      // Toggle function
+      inputBox.addEventListener('click', function(e) {
+        e.stopPropagation();
+        console.log('Input clicked!');
+        
+        if (linksContainer.classList.contains('hidden')) {
+          linksContainer.classList.remove('hidden');
+          setTimeout(function() {
+            linksContainer.classList.add('visible');
+          }, 10);
+        } else {
+          linksContainer.classList.remove('visible');
+          setTimeout(function() {
+            linksContainer.classList.add('hidden');
+          }, 300);
+        }
+      });
+      
+      // Close when clicking elsewhere
+      document.addEventListener('click', function(e) {
+        if (!inputBox.contains(e.target) && !linksContainer.contains(e.target)) {
+          if (!linksContainer.classList.contains('hidden')) {
+            linksContainer.classList.remove('visible');
+            setTimeout(function() {
+              linksContainer.classList.add('hidden');
+            }, 300);
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html> 

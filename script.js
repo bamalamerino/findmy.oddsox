@@ -1,140 +1,63 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for the DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Get essential elements
   const chatInputContainer = document.querySelector('.chat-input-container');
   const linksContainer = document.querySelector('.links-container');
-  const messageBubbles = document.querySelectorAll('.message-bubble');
   
-  // Function to toggle links visibility
-  function toggleLinks() {
-    // Toggle hidden state
-    linksContainer.classList.toggle('hidden');
+  // SUPER SIMPLE TOGGLE - just show/hide the links when clicking the input
+  chatInputContainer.addEventListener('click', function(event) {
+    // Prevent any default behavior
+    event.preventDefault();
+    event.stopPropagation();
     
-    // Add a small delay before adding the 'visible' class for a smooth transition
-    if (!linksContainer.classList.contains('hidden')) {
-      // Change chat input text when expanded
-      const chatInputText = document.querySelector('.chat-input span');
-      if (chatInputText) {
-        chatInputText.textContent = 'Type to filter...';
-      }
-      
-      // Change icon to close
-      const chatInputIcon = document.querySelector('.chat-input i');
-      if (chatInputIcon) {
-        chatInputIcon.classList.remove('fa-search');
-        chatInputIcon.classList.add('fa-times');
-      }
-      
-      setTimeout(() => {
+    console.log('Input clicked!'); // Debug
+    
+    // Simply toggle the 'hidden' class
+    if (linksContainer.classList.contains('hidden')) {
+      // Show links
+      linksContainer.classList.remove('hidden');
+      setTimeout(function() {
         linksContainer.classList.add('visible');
+        console.log('Links should be visible now');
       }, 10);
-      
-      // Reset animation delays for message bubbles
-      messageBubbles.forEach((bubble, index) => {
-        bubble.style.animationDelay = `${0.05 * (index + 1)}s`;
-        // Reset animation by removing and adding the class
-        bubble.style.animation = 'none';
-        bubble.offsetHeight; // Trigger reflow
-        bubble.style.animation = null;
-      });
     } else {
-      // Change chat input text back when collapsed
-      const chatInputText = document.querySelector('.chat-input span');
-      if (chatInputText) {
-        chatInputText.textContent = 'Prompts, Newsletter, ...?';
-      }
-      
-      // Change icon back to search
-      const chatInputIcon = document.querySelector('.chat-input i');
-      if (chatInputIcon) {
-        chatInputIcon.classList.remove('fa-times');
-        chatInputIcon.classList.add('fa-search');
-      }
-      
+      // Hide links
       linksContainer.classList.remove('visible');
-    }
-  }
-  
-  // Toggle links visibility when chat input is clicked
-  chatInputContainer.addEventListener('click', toggleLinks);
-  
-  // Close on ESC key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !linksContainer.classList.contains('hidden')) {
-      toggleLinks();
-    }
-    
-    // Open command palette on Cmd+K (Mac) or Ctrl+K (Windows)
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      if (linksContainer.classList.contains('hidden')) {
-        toggleLinks();
-      }
+      setTimeout(function() {
+        linksContainer.classList.add('hidden');
+        console.log('Links should be hidden now');
+      }, 300);
     }
   });
   
-  // Add keyboard shortcuts for each menu item
-  const keyShortcuts = {
-    'k': 0, // Prompts
-    'n': 1, // Newsletter
-    's': 2, // Collaboration
-    'm': 3, // Merch
-    'd': 4  // Support
-  };
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.metaKey || e.ctrlKey) {
-      const key = e.key.toLowerCase();
-      if (key in keyShortcuts) {
-        e.preventDefault();
-        const index = keyShortcuts[key];
-        const linkItems = document.querySelectorAll('.message-bubble a');
-        if (linkItems[index]) {
-          window.location.href = linkItems[index].getAttribute('href');
-        }
-      }
-    }
-  });
-  
-  // Enable filter functionality
-  const chatInput = document.querySelector('.chat-input');
-  
-  chatInput.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent the click from bubbling to container
-  });
-  
-  chatInput.addEventListener('keyup', (e) => {
-    if (!linksContainer.classList.contains('hidden')) {
-      const filterText = e.target.value.toLowerCase();
-      const linkItems = document.querySelectorAll('.message-bubble');
+  // Close when clicking outside
+  document.addEventListener('click', function(event) {
+    // If links are visible and click is outside the container areas
+    if (!linksContainer.classList.contains('hidden') && 
+        !chatInputContainer.contains(event.target) && 
+        !linksContainer.contains(event.target)) {
       
-      linkItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (text.includes(filterText)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
+      // Hide links
+      linksContainer.classList.remove('visible');
+      setTimeout(function() {
+        linksContainer.classList.add('hidden');
+      }, 300);
     }
   });
   
-  // Add subtle animations
-  function pulseAnimation() {
-    const chatInput = document.querySelector('.chat-input');
-    chatInput.style.transform = 'scale(1.02)';
-    
-    setTimeout(() => {
-      chatInput.style.transform = 'scale(1)';
-    }, 1000);
+  // Close with ESC key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && !linksContainer.classList.contains('hidden')) {
+      linksContainer.classList.remove('visible');
+      setTimeout(function() {
+        linksContainer.classList.add('hidden');
+      }, 300);
+    }
+  });
+  
+  // Debugging - add a visible indicator to show the script is working
+  const searchBar = document.querySelector('.search-bar p');
+  if (searchBar) {
+    searchBar.style.textDecoration = 'underline';
   }
-  
-  // Run the pulse animation every 3 seconds until first click
-  let pulseInterval = setInterval(pulseAnimation, 3000);
-  
-  // Stop the pulse animation after the first click
-  chatInputContainer.addEventListener('click', () => {
-    clearInterval(pulseInterval);
-  }, { once: true });
-  
-  // Initial setup
-  setTimeout(pulseAnimation, 1000);
 }); 

@@ -373,6 +373,19 @@ footer {
 .message-bubble:nth-child(4) { animation-delay: 0.4s; }
 .message-bubble:nth-child(5) { animation-delay: 0.5s; }
 
+/* Animation for keyboard shortcut activation */
+@keyframes shortcutActivated {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.shortcut-active {
+  animation: shortcutActivated 0.3s ease-in-out;
+  color: var(--accent-color) !important;
+  font-weight: bold;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .container {

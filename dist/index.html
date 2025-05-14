@@ -202,14 +202,14 @@
           </div>
           
           <div class="keyboard-hint">
-            <span>Press ⌘K to open commands</span>
+            <span>Press ⌘P to toggle panel, ⌘K, ⌘N, etc. for shortcuts</span>
             <span class="esc-hint">ESC to cancel</span>
           </div>
         </div>
       </div>
       
       <footer>
-        <p>&copy; 2025 OddSox. All rights reserved.</p>
+        <p>&copy; 2025 Oddsox DMA. All rights reserved.</p>
       </footer>
     </div>
   </div>
@@ -249,6 +249,101 @@
           }
         }
       });
+      
+      // Keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Check for Escape key to close panel
+        if (e.key === 'Escape') {
+          if (!linksContainer.classList.contains('hidden')) {
+            linksContainer.classList.remove('visible');
+            setTimeout(function() {
+              linksContainer.classList.add('hidden');
+            }, 300);
+            return;
+          }
+        }
+        
+        // Check if Command (Mac) or Ctrl (Windows) key is pressed
+        const isCmdOrCtrl = e.metaKey || e.ctrlKey;
+        
+        if (isCmdOrCtrl) {
+          let linkUrl = null;
+          let shortcutElement = null;
+          
+          switch(e.key.toLowerCase()) {
+            case 'k':
+              // Prompts
+              linkUrl = document.querySelector('.message-bubble:nth-child(1) .link-item').href;
+              shortcutElement = document.querySelector('.message-bubble:nth-child(1) .shortcut');
+              break;
+            case 'n':
+              // Newsletter
+              linkUrl = document.querySelector('.message-bubble:nth-child(2) .link-item').href;
+              shortcutElement = document.querySelector('.message-bubble:nth-child(2) .shortcut');
+              break;
+            case 's':
+              // Collaboration
+              linkUrl = document.querySelector('.message-bubble:nth-child(3) .link-item').href;
+              shortcutElement = document.querySelector('.message-bubble:nth-child(3) .shortcut');
+              break;
+            case 'm':
+              // Merch
+              linkUrl = document.querySelector('.message-bubble:nth-child(4) .link-item').href;
+              shortcutElement = document.querySelector('.message-bubble:nth-child(4) .shortcut');
+              break;
+            case 'd':
+              // Support
+              linkUrl = document.querySelector('.message-bubble:nth-child(5) .link-item').href;
+              shortcutElement = document.querySelector('.message-bubble:nth-child(5) .shortcut');
+              break;
+            case 'p':
+              // Show/hide panel with just Cmd+P
+              e.preventDefault();
+              toggleLinksContainer();
+              return;
+          }
+          
+          if (linkUrl) {
+            e.preventDefault(); // Prevent default browser shortcut
+            
+            // Show links container if hidden
+            if (linksContainer.classList.contains('hidden')) {
+              linksContainer.classList.remove('hidden');
+              setTimeout(function() {
+                linksContainer.classList.add('visible');
+              }, 10);
+            }
+            
+            // Add visual feedback
+            if (shortcutElement) {
+              shortcutElement.classList.add('shortcut-active');
+              setTimeout(() => {
+                shortcutElement.classList.remove('shortcut-active');
+              }, 300);
+            }
+            
+            // Trigger animation and then navigate
+            setTimeout(() => {
+              window.open(linkUrl, '_blank');
+            }, 150);
+          }
+        }
+      });
+      
+      // Helper function to toggle links container
+      function toggleLinksContainer() {
+        if (linksContainer.classList.contains('hidden')) {
+          linksContainer.classList.remove('hidden');
+          setTimeout(function() {
+            linksContainer.classList.add('visible');
+          }, 10);
+        } else {
+          linksContainer.classList.remove('visible');
+          setTimeout(function() {
+            linksContainer.classList.add('hidden');
+          }, 300);
+        }
+      }
     });
   </script>
 </body>

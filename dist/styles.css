@@ -52,7 +52,7 @@ body {
   height: auto;
   max-width: 90%;
   margin-bottom: 1.5rem;
-  filter: drop-shadow(0 4px 10px var(--shadow-color));
+  filter: none;
 }
 
 .profile h1 {
@@ -64,7 +64,7 @@ body {
 
 .profile p {
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: white;
   letter-spacing: 0.5px;
 }
 
@@ -363,7 +363,7 @@ footer {
   text-align: center;
   margin-top: 2rem;
   font-size: 0.8rem;
-  color: var(--text-secondary);
+  color: white;
 }
 
 /* Animation delay for message bubbles */
